@@ -57,13 +57,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Webshop.Help", "Webshop.Hel
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Webshop.Catalog.Application.Test", "Webshop.Catalog.Application.Test\Webshop.Catalog.Application.Test.csproj", "{854FE61B-35AA-4526-87A9-F5821ACDCD6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webshop.Orderhandling.Api", "Webshop.Orderhandling.Api\Webshop.Orderhandling.Api.csproj", "{40BD2004-EF78-4AF9-9802-8D99C7DA3250}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Webshop.Orderhandling.Api", "Webshop.Orderhandling.Api\Webshop.Orderhandling.Api.csproj", "{40BD2004-EF78-4AF9-9802-8D99C7DA3250}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webshop.Orderhandling.Application", "Webshop.Orderhandling.Application\Webshop.Orderhandling.Application.csproj", "{3DB41238-4782-4825-8217-625FB02B440A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Webshop.Orderhandling.Application", "Webshop.Orderhandling.Application\Webshop.Orderhandling.Application.csproj", "{3DB41238-4782-4825-8217-625FB02B440A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webshop.Orderhandling.Persistence", "Webshop.Orderhandling.Persistence\Webshop.Orderhandling.Persistence.csproj", "{0C7B0A07-5881-45A0-BC1B-85C176E6835C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Webshop.Orderhandling.Persistence", "Webshop.Orderhandling.Persistence\Webshop.Orderhandling.Persistence.csproj", "{0C7B0A07-5881-45A0-BC1B-85C176E6835C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webshop.Orderhandling.Application.Test", "Webshop.Orderhandling.Application.Test\Webshop.Orderhandling.Application.Test.csproj", "{216404A8-B834-447F-AE03-A0F2512F3558}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Webshop.Orderhandling.Application.Test", "Webshop.Orderhandling.Application.Test\Webshop.Orderhandling.Application.Test.csproj", "{216404A8-B834-447F-AE03-A0F2512F3558}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webshop.Orderhandling.Domain", "Webshop.Orderhandling.Domain\Webshop.Orderhandling.Domain.csproj", "{47DAEC16-3996-44E3-A628-DAD934DC03BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -147,6 +149,10 @@ Global
 		{216404A8-B834-447F-AE03-A0F2512F3558}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{216404A8-B834-447F-AE03-A0F2512F3558}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{216404A8-B834-447F-AE03-A0F2512F3558}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47DAEC16-3996-44E3-A628-DAD934DC03BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47DAEC16-3996-44E3-A628-DAD934DC03BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47DAEC16-3996-44E3-A628-DAD934DC03BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47DAEC16-3996-44E3-A628-DAD934DC03BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -174,6 +180,7 @@ Global
 		{3DB41238-4782-4825-8217-625FB02B440A} = {774CCD7D-ED3B-4D75-8A7F-CEFC745765DB}
 		{0C7B0A07-5881-45A0-BC1B-85C176E6835C} = {1E6BED77-EB85-4EC8-BE0F-7E8A57F3D4AF}
 		{216404A8-B834-447F-AE03-A0F2512F3558} = {BF604B02-EA9B-4EE8-A7F0-EDD07B387082}
+		{47DAEC16-3996-44E3-A628-DAD934DC03BC} = {774CCD7D-ED3B-4D75-8A7F-CEFC745765DB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {822AAF83-FC8D-42BE-9726-63314F24EB10}
