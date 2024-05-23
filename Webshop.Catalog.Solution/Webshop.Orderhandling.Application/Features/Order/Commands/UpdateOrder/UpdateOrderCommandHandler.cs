@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Webshop.Application.Contracts;
@@ -26,12 +25,20 @@ namespace Webshop.Orderhandling.Application.Features.Order.Commands.UpdateOrder
         {
             try
             {
-                var order = await this.orderRepository.GetOrderById(command.OrderId);
-                if (order == null)
+                // Validate non-empty order items
+                if (command.OrderItems == null || !command.OrderItems.Any())
                 {
-                    return Result.Fail(Errors.General.NotFound(command.OrderId));
+                    return Result.Fail(Errors.General.ValueIsEmpty("Order must contain at least one item."));
                 }
 
+                var order = await orderRepository.GetById(command.OrderId);
+
+                if (order == null)
+                {
+                    return Result.Fail(Errors.General.NotFound<int>(command.OrderId));
+                }
+
+                order.CustomerId = command.CustomerId;
                 order.OrderItems.Clear();
                 order.TotalAmount = 0;
 
@@ -43,13 +50,19 @@ namespace Webshop.Orderhandling.Application.Features.Order.Commands.UpdateOrder
                         Quantity = item.Quantity,
                         UnitPrice = item.UnitPrice
                     };
-
-                    order.TotalAmount += item.Quantity * item.UnitPrice;
                     order.OrderItems.Add(orderItem);
+                    order.TotalAmount += item.Quantity * item.UnitPrice;
                 }
 
-                await this.orderRepository.UpdateAsync(order);
+                order.ApplyDiscount(command.Discount);
+
+                await orderRepository.UpdateAsync(order);
                 return Result.Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                this.logger.LogError(ex, ex.Message);
+                return Result.Fail(Errors.General.UnspecifiedError(ex.Message));
             }
             catch (Exception ex)
             {

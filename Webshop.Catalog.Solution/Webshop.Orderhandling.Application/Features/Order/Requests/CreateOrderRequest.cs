@@ -12,6 +12,7 @@ namespace Webshop.Orderhandling.Application.Features.Order.Requests
     {
         public string CustomerId { get; set; }
         public List<CreateOrderItem> OrderItems { get; set; }
+        public int Discount { get; set; }
 
         public class CreateOrderItem
         {
@@ -24,27 +25,20 @@ namespace Webshop.Orderhandling.Application.Features.Order.Requests
         {
             public Validator()
             {
-                RuleFor(r => r.CustomerId)
-                    .NotEmpty()
-                    .WithMessage(Errors.General.ValueIsRequired(nameof(CustomerId)).Code + " (" + Errors.General.ValueIsRequired(nameof(CustomerId)).Message + ")");
-                RuleForEach(r => r.OrderItems)
-                    .SetValidator(new CreateOrderItemValidator());
-            }
-
-            public class CreateOrderItemValidator : AbstractValidator<CreateOrderItem>
-            {
-                public CreateOrderItemValidator()
+                RuleFor(r => r.CustomerId).NotEmpty().WithMessage(Errors.General.ValueIsEmpty(nameof(CustomerId)).Message);
+                RuleForEach(r => r.OrderItems).ChildRules(orderItem =>
                 {
-                    RuleFor(r => r.ProductId)
+                    orderItem.RuleFor(r => r.ProductId)
                         .GreaterThan(0)
                         .WithMessage(Errors.General.ValueTooSmall(nameof(CreateOrderItem.ProductId), 0).Message);
-                    RuleFor(r => r.Quantity)
+                    orderItem.RuleFor(r => r.Quantity)
                         .GreaterThan(0)
                         .WithMessage(Errors.General.ValueTooSmall(nameof(CreateOrderItem.Quantity), 0).Message);
-                    RuleFor(r => r.UnitPrice)
+                    orderItem.RuleFor(r => r.UnitPrice)
                         .GreaterThan(0)
                         .WithMessage(Errors.General.ValueTooSmall(nameof(CreateOrderItem.UnitPrice), 0).Message);
-                }
+                });
+                    RuleFor(r => r.Discount).InclusiveBetween(0, 15).WithMessage(Errors.General.ValueOutOfRange(nameof(Discount), 0, 15).Message);
             }
         }
     }

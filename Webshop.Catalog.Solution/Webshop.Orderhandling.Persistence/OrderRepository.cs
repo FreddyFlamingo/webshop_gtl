@@ -59,7 +59,9 @@ namespace Webshop.Orderhandling.Persistence
                 order.CustomerId = entity.CustomerId;
                 order.TotalAmount = entity.TotalAmount;
                 order.OrderItems = entity.OrderItems;
+                order.Discount = entity.Discount;
             }
+
             return Task.CompletedTask;
         }
     }

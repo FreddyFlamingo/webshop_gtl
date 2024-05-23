@@ -67,7 +67,7 @@ namespace Webshop.Orderhandling.Application.Test
 
             // Assert
             Assert.False(result.Success);
-            Assert.Equal("Order must contain at least one item.", result.Error.Message);
+            Assert.Equal("The value cannot be empty: Order must contain at least one item. ", result.Error.Message);
         }
 
         [Fact]

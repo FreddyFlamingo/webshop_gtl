@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Webshop.Application.Contracts;
@@ -25,7 +23,14 @@ namespace Webshop.Orderhandling.Application.Features.Order.Commands.DeleteOrder
         {
             try
             {
-                await this.orderRepository.DeleteAsync(command.OrderId);
+                var order = await orderRepository.GetById(command.OrderId);
+
+                if (order == null)
+                {
+                    return Result.Fail(Errors.General.NotFound<int>(command.OrderId));
+                }
+
+                await orderRepository.DeleteAsync(order.Id);
                 return Result.Ok();
             }
             catch (Exception ex)

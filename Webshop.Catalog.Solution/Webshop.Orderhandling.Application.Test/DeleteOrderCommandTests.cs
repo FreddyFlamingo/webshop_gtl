@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using Moq;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 using Webshop.Orderhandling.Application.Contracts.Persistence;
 using Webshop.Orderhandling.Application.Features.Order.Commands.DeleteOrder;
+using Webshop.Orderhandling.Domain.AggregateRoots;
 using Webshop.Domain.Common;
 
 namespace Webshop.Orderhandling.Application.Test
@@ -21,6 +18,9 @@ namespace Webshop.Orderhandling.Application.Test
             // Arrange
             var loggerMock = new Mock<ILogger<DeleteOrderCommandHandler>>();
             var orderRepositoryMock = new Mock<IOrderRepository>();
+            var order = new Order { Id = 1, CustomerId = "customer1" };
+            orderRepositoryMock.Setup(m => m.GetById(It.IsAny<int>())).ReturnsAsync(order);
+
             var command = new DeleteOrderCommand(1);
             var handler = new DeleteOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
@@ -28,17 +28,18 @@ namespace Webshop.Orderhandling.Application.Test
             var result = await handler.Handle(command);
 
             // Assert
-            orderRepositoryMock.Verify(m => m.DeleteAsync(1), Times.Once);
+            orderRepositoryMock.Verify(m => m.DeleteAsync(It.IsAny<int>()), Times.Once);
             Assert.True(result.Success);
         }
 
         [Fact]
-        public async Task DeleteOrderCommandHandler_OrderNotFound_ExpectFailure()
+        public async Task DeleteOrderCommandHandler_InvalidCommand_ExpectFailure()
         {
             // Arrange
             var loggerMock = new Mock<ILogger<DeleteOrderCommandHandler>>();
             var orderRepositoryMock = new Mock<IOrderRepository>();
-            orderRepositoryMock.Setup(m => m.DeleteAsync(1)).ThrowsAsync(new Exception("Order not found"));
+            orderRepositoryMock.Setup(m => m.GetById(It.IsAny<int>())).ReturnsAsync((Order)null);
+
             var command = new DeleteOrderCommand(1);
             var handler = new DeleteOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
@@ -47,6 +48,7 @@ namespace Webshop.Orderhandling.Application.Test
 
             // Assert
             Assert.False(result.Success);
+            Assert.Equal("entity.not.found", result.Error.Code);
         }
     }
 }
