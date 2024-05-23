@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Webshop.Data.Persistence\Webshop.Data.Persistence.csproj" />
+    <ProjectReference Include="..\Webshop.Orderhandling.Application\Webshop.Orderhandling.Application.csproj" />
+  </ItemGroup>
+
 </Project>
