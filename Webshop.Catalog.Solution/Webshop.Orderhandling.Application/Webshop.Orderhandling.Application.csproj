@@ -22,8 +22,4 @@
     <ProjectReference Include="..\Webshop.Orderhandling.Domain\Webshop.Orderhandling.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Order\Queries\GetOrdersByCustomerId\" />
-  </ItemGroup>
-
 </Project>

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Webshop.Application.Contracts;
+using Webshop.Catalog.Domain.AggregateRoots;
 
 namespace Webshop.Orderhandling.Application.Features.Order.Commands.UpdateOrder
 {
@@ -20,9 +21,9 @@ namespace Webshop.Orderhandling.Application.Features.Order.Commands.UpdateOrder
 
         public class UpdateOrderItem
         {
-            public int ProductId { get; set; }
+            public Product Product { get; set; }
             public int Quantity { get; set; }
-            public decimal UnitPrice { get; set; }
+
         }
     }
 }

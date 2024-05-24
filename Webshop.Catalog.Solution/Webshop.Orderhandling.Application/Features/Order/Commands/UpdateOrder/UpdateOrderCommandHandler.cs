@@ -46,12 +46,12 @@ namespace Webshop.Orderhandling.Application.Features.Order.Commands.UpdateOrder
                 {
                     var orderItem = new OrderItem
                     {
-                        ProductId = item.ProductId,
+                        Product = item.Product,
                         Quantity = item.Quantity,
-                        UnitPrice = item.UnitPrice
                     };
+
                     order.OrderItems.Add(orderItem);
-                    order.TotalAmount += item.Quantity * item.UnitPrice;
+                    order.TotalAmount += item.Quantity * item.Product.Price;
                 }
 
                 order.ApplyDiscount(command.Discount);

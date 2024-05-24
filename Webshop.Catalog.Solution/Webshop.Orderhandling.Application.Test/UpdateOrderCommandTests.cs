@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Moq;
@@ -8,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Webshop.Orderhandling.Application.Contracts.Persistence;
 using Webshop.Orderhandling.Application.Features.Order.Commands.UpdateOrder;
 using Webshop.Orderhandling.Domain.AggregateRoots;
+using Webshop.Catalog.Domain.AggregateRoots;
 using Webshop.Domain.Common;
 
 namespace Webshop.Orderhandling.Application.Test
@@ -20,6 +20,7 @@ namespace Webshop.Orderhandling.Application.Test
             // Arrange
             var loggerMock = new Mock<ILogger<UpdateOrderCommandHandler>>();
             var orderRepositoryMock = new Mock<IOrderRepository>();
+            var product = new Product("Test Product", "SKU123", 100, "DKK");
             var order = new Order
             {
                 Id = 1,
@@ -27,14 +28,14 @@ namespace Webshop.Orderhandling.Application.Test
                 Discount = 5,
                 OrderItems = new List<OrderItem>
                 {
-                    new OrderItem { ProductId = 1, Quantity = 1, UnitPrice = 10 }
+                    new OrderItem { Product = product, Quantity = 1 }
                 }
             };
             orderRepositoryMock.Setup(m => m.GetById(It.IsAny<int>())).ReturnsAsync(order);
 
             var command = new UpdateOrderCommand(1, "customer1", new List<UpdateOrderCommand.UpdateOrderItem>
             {
-                new UpdateOrderCommand.UpdateOrderItem { ProductId = 1, Quantity = 2, UnitPrice = 10 }
+                new UpdateOrderCommand.UpdateOrderItem { Product = product, Quantity = 2 }
             }, 10);
             var handler = new UpdateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
@@ -68,6 +69,7 @@ namespace Webshop.Orderhandling.Application.Test
             // Arrange
             var loggerMock = new Mock<ILogger<UpdateOrderCommandHandler>>();
             var orderRepositoryMock = new Mock<IOrderRepository>();
+            var product = new Product("Test Product", "SKU123", 100, "DKK");
             var order = new Order
             {
                 Id = 1,
@@ -75,14 +77,14 @@ namespace Webshop.Orderhandling.Application.Test
                 Discount = 5,
                 OrderItems = new List<OrderItem>
                 {
-                    new OrderItem { ProductId = 1, Quantity = 1, UnitPrice = 10 }
+                    new OrderItem { Product = product, Quantity = 1 }
                 }
             };
             orderRepositoryMock.Setup(m => m.GetById(It.IsAny<int>())).ReturnsAsync(order);
 
             var command = new UpdateOrderCommand(1, "customer1", new List<UpdateOrderCommand.UpdateOrderItem>
             {
-                new UpdateOrderCommand.UpdateOrderItem { ProductId = 1, Quantity = 2, UnitPrice = 10 }
+                new UpdateOrderCommand.UpdateOrderItem { Product = product, Quantity = 2 }
             }, 20); // Invalid discount
             var handler = new UpdateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
@@ -91,7 +93,7 @@ namespace Webshop.Orderhandling.Application.Test
 
             // Assert
             Assert.False(result.Success);
-            Assert.Equal("unspecified.error", result.Error.Code);
+            Assert.Equal("Discount must be between 0% and 15%", result.Error.Message);
         }
 
         [Fact]
@@ -100,6 +102,7 @@ namespace Webshop.Orderhandling.Application.Test
             // Arrange
             var loggerMock = new Mock<ILogger<UpdateOrderCommandHandler>>();
             var orderRepositoryMock = new Mock<IOrderRepository>();
+            var product = new Product("Test Product", "SKU123", 100, "DKK");
             var order = new Order
             {
                 Id = 1,
@@ -107,7 +110,7 @@ namespace Webshop.Orderhandling.Application.Test
                 Discount = 5,
                 OrderItems = new List<OrderItem>
                 {
-                    new OrderItem { ProductId = 1, Quantity = 1, UnitPrice = 10 }
+                    new OrderItem { Product = product, Quantity = 1 }
                 }
             };
             orderRepositoryMock.Setup(m => m.GetById(It.IsAny<int>())).ReturnsAsync(order);
@@ -120,7 +123,7 @@ namespace Webshop.Orderhandling.Application.Test
 
             // Assert
             Assert.False(result.Success);
-            Assert.Equal("value.empty", result.Error.Code);
+            Assert.Equal("The value cannot be empty: Order must contain at least one item. ", result.Error.Message);
         }
     }
 }

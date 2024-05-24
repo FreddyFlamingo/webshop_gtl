@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
+using Webshop.Catalog.Domain.AggregateRoots;
 using Webshop.Domain.Common;
 
 namespace Webshop.Orderhandling.Application.Features.Order.Requests
@@ -16,9 +17,9 @@ namespace Webshop.Orderhandling.Application.Features.Order.Requests
 
         public class CreateOrderItem
         {
-            public int ProductId { get; set; }
+            public Product Product { get; set; }
             public int Quantity { get; set; }
-            public decimal UnitPrice { get; set; }
+            public decimal TotalPrice { get; set; }
         }
 
         public class Validator : AbstractValidator<CreateOrderRequest>
@@ -28,15 +29,15 @@ namespace Webshop.Orderhandling.Application.Features.Order.Requests
                 RuleFor(r => r.CustomerId).NotEmpty().WithMessage(Errors.General.ValueIsEmpty(nameof(CustomerId)).Message);
                 RuleForEach(r => r.OrderItems).ChildRules(orderItem =>
                 {
-                    orderItem.RuleFor(r => r.ProductId)
-                        .GreaterThan(0)
-                        .WithMessage(Errors.General.ValueTooSmall(nameof(CreateOrderItem.ProductId), 0).Message);
+                    orderItem.RuleFor(r => r.Product.Id)
+                        .NotEmpty()
+                        .WithMessage(Errors.General.ValueIsEmpty(nameof(CreateOrderItem.Product.Id)).Message);
                     orderItem.RuleFor(r => r.Quantity)
                         .GreaterThan(0)
-                        .WithMessage(Errors.General.ValueTooSmall(nameof(CreateOrderItem.Quantity), 0).Message);
-                    orderItem.RuleFor(r => r.UnitPrice)
+                        .WithMessage(Errors.General.ValueTooSmall(nameof(CreateOrderItem.Quantity), 1).Message);
+                    orderItem.RuleFor(r => r.TotalPrice)
                         .GreaterThan(0)
-                        .WithMessage(Errors.General.ValueTooSmall(nameof(CreateOrderItem.UnitPrice), 0).Message);
+                        .WithMessage(Errors.General.ValueTooSmall(nameof(CreateOrderItem.TotalPrice), 1).Message);
                 });
                     RuleFor(r => r.Discount).InclusiveBetween(0, 15).WithMessage(Errors.General.ValueOutOfRange(nameof(Discount), 0, 15).Message);
             }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Webshop.Application.Contracts;
+using Webshop.Catalog.Domain.AggregateRoots;
 
 namespace Webshop.Orderhandling.Application.Features.Order.Commands.CreateOrder
 {
@@ -22,9 +23,9 @@ namespace Webshop.Orderhandling.Application.Features.Order.Commands.CreateOrder
 
         public class CreateOrderItem
         {
-            public int ProductId { get; set; }
+            public Product Product { get; set; }
             public int Quantity { get; set; }
-            public decimal UnitPrice { get; set; }
+            public decimal TotalPrice => Product.Price * Quantity;
         }
     }
 }

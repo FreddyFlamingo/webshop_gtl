@@ -11,8 +11,16 @@ namespace Webshop.Orderhandling.Application.Profiles
     {
         public MappingProfile()
         {
-            CreateMap<Order, OrderDto>().ReverseMap();
-            CreateMap<OrderItem, OrderItemDto>().ReverseMap();
+            CreateMap<Order, OrderDto>()
+                .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems));
+            CreateMap<OrderItem, OrderItemDto>()
+                .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Product.Id))
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
+                .ForMember(dest => dest.SKU, opt => opt.MapFrom(src => src.Product.SKU))
+                .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.Quantity * src.Product.Price));
+
+            CreateMap<OrderDto, Order>();
+            CreateMap<OrderItemDto, OrderItem>();
 
             CreateMap<Order, CreateOrderRequest>().ReverseMap();
             CreateMap<OrderItem, CreateOrderRequest.CreateOrderItem>().ReverseMap();
@@ -21,7 +29,7 @@ namespace Webshop.Orderhandling.Application.Profiles
             CreateMap<OrderItem, UpdateOrderRequest.UpdateOrderItem>().ReverseMap();
 
             CreateMap<CreateOrderRequest, CreateOrderCommand>()
-              .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems));
+                .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems));
             CreateMap<CreateOrderRequest.CreateOrderItem, CreateOrderCommand.CreateOrderItem>();
 
             CreateMap<UpdateOrderRequest, UpdateOrderCommand>()

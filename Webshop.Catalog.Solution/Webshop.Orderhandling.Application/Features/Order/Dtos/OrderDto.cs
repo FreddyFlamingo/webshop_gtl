@@ -13,6 +13,7 @@ namespace Webshop.Orderhandling.Application.Features.Order.Dtos
         public DateTime OrderDate { get; set; }
         public string CustomerId { get; set; }
         public decimal TotalAmount { get; set; }
+        public decimal Discount { get; set; }
         public List<OrderItemDto> OrderItems { get; set; }
     }
 

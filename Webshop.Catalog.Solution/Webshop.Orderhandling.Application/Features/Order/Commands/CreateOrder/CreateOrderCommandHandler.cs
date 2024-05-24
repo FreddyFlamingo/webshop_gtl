@@ -36,19 +36,18 @@ namespace Webshop.Orderhandling.Application.Features.Order.Commands.CreateOrder
                     OrderDate = DateTime.UtcNow,
                     CustomerId = command.CustomerId,
                     TotalAmount = 0,
-                    Discount = command.Discount
+                    Discount = command.Discount,
                 };
 
                 foreach (var item in command.OrderItems)
                 {
                     var orderItem = new OrderItem
                     {
-                        ProductId = item.ProductId,
-                        Quantity = item.Quantity,
-                        UnitPrice = item.UnitPrice
+                        Product = item.Product,
+                        Quantity = item.Quantity
                     };
 
-                    order.TotalAmount += item.Quantity * item.UnitPrice;
+                    order.TotalAmount += item.TotalPrice;
                     order.OrderItems.Add(orderItem);
                 }
 

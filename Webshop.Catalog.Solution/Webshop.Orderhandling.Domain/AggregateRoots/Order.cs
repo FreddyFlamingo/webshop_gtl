@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Webshop.Catalog.Domain.AggregateRoots;
 using Webshop.Domain.Common;
 
 namespace Webshop.Orderhandling.Domain.AggregateRoots
@@ -13,8 +14,8 @@ namespace Webshop.Orderhandling.Domain.AggregateRoots
         public DateTime OrderDate { get; set; }
         public string CustomerId { get; set; }
         public decimal TotalAmount { get; set; }
-        public List<OrderItem> OrderItems { get; set; }
         public decimal Discount { get; set; }
+        public List<OrderItem> OrderItems { get; set; }
 
         public Order()
         {
@@ -36,7 +37,7 @@ namespace Webshop.Orderhandling.Domain.AggregateRoots
             decimal total = 0;
             foreach (var item in OrderItems)
             {
-                total += item.Quantity * item.UnitPrice;
+                total += item.Product.Price;
             }
             TotalAmount = total - (total * (Discount / 100));
         }

@@ -18,27 +18,28 @@ namespace Webshop.Orderhandling.Application.Features.Order.Requests
 
         public class UpdateOrderItem
         {
-            public int ProductId { get; set; }
+            public Product Product { get; set; }
             public int Quantity { get; set; }
-            public decimal UnitPrice { get; set; }
+            public decimal TotalPrice { get; set; }
         }
 
         public class Validator : AbstractValidator<UpdateOrderRequest>
         {
             public Validator()
             {
+                RuleFor(r => r.OrderId).GreaterThan(0).WithMessage(Errors.General.ValueTooSmall(nameof(OrderId), 1).Message);
                 RuleFor(r => r.CustomerId).NotEmpty().WithMessage(Errors.General.ValueIsEmpty(nameof(CustomerId)).Message);
                 RuleForEach(r => r.OrderItems).ChildRules(orderItem =>
                 {
-                    orderItem.RuleFor(r => r.ProductId)
-                        .GreaterThan(0)
-                        .WithMessage(Errors.General.ValueTooSmall(nameof(UpdateOrderItem.ProductId), 0).Message);
+                    orderItem.RuleFor(r => r.Product.Id)
+                        .NotEmpty()
+                        .WithMessage(Errors.General.ValueIsEmpty(nameof(UpdateOrderItem.Product.Id)).Message);
                     orderItem.RuleFor(r => r.Quantity)
                         .GreaterThan(0)
-                        .WithMessage(Errors.General.ValueTooSmall(nameof(UpdateOrderItem.Quantity), 0).Message);
-                    orderItem.RuleFor(r => r.UnitPrice)
+                        .WithMessage(Errors.General.ValueTooSmall(nameof(UpdateOrderItem.Quantity), 1).Message);
+                    orderItem.RuleFor(r => r.TotalPrice)
                         .GreaterThan(0)
-                        .WithMessage(Errors.General.ValueTooSmall(nameof(UpdateOrderItem.UnitPrice), 0).Message);
+                        .WithMessage(Errors.General.ValueTooSmall(nameof(UpdateOrderItem.TotalPrice), 1).Message);
                 });
                 RuleFor(r => r.Discount).InclusiveBetween(0, 15).WithMessage(Errors.General.ValueOutOfRange(nameof(Discount), 0, 15).Message);
             }

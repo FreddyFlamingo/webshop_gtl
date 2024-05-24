@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Webshop.Orderhandling.Application.Contracts.Persistence;
 using Webshop.Orderhandling.Application.Features.Order.Commands.CreateOrder;
 using Webshop.Orderhandling.Domain.AggregateRoots;
+using Webshop.Catalog.Domain.AggregateRoots;
 using Webshop.Domain.Common;
 
 namespace Webshop.Orderhandling.Application.Test
@@ -19,9 +20,10 @@ namespace Webshop.Orderhandling.Application.Test
             // Arrange
             var loggerMock = new Mock<ILogger<CreateOrderCommandHandler>>();
             var orderRepositoryMock = new Mock<IOrderRepository>();
+            var product = new Product("Test Product", "SKU123", 100, "DKK");
             var command = new CreateOrderCommand("customer1", new List<CreateOrderCommand.CreateOrderItem>
             {
-                new CreateOrderCommand.CreateOrderItem { ProductId = 1, Quantity = 2, UnitPrice = 10 }
+                new CreateOrderCommand.CreateOrderItem { Product = product, Quantity = 2 }
             }, 10);
             var handler = new CreateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
@@ -39,9 +41,10 @@ namespace Webshop.Orderhandling.Application.Test
             // Arrange
             var loggerMock = new Mock<ILogger<CreateOrderCommandHandler>>();
             var orderRepositoryMock = new Mock<IOrderRepository>();
+            var product = new Product("Test Product", "SKU123", 100, "DKK");
             var command = new CreateOrderCommand("customer1", new List<CreateOrderCommand.CreateOrderItem>
             {
-                new CreateOrderCommand.CreateOrderItem { ProductId = 1, Quantity = 2, UnitPrice = 10 }
+                new CreateOrderCommand.CreateOrderItem { Product = product, Quantity = 2}
             }, 20);
             var handler = new CreateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
@@ -76,9 +79,10 @@ namespace Webshop.Orderhandling.Application.Test
             // Arrange
             var loggerMock = new Mock<ILogger<CreateOrderCommandHandler>>();
             var orderRepositoryMock = new Mock<IOrderRepository>();
+            var product = new Product("Test Product", "SKU123", 100, "DKK");
             var command = new CreateOrderCommand("customer1", new List<CreateOrderCommand.CreateOrderItem>
             {
-                new CreateOrderCommand.CreateOrderItem { ProductId = 1, Quantity = 2, UnitPrice = 10 }
+                new CreateOrderCommand.CreateOrderItem { Product = product, Quantity = 2 }
             }, -5);
             var handler = new CreateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
