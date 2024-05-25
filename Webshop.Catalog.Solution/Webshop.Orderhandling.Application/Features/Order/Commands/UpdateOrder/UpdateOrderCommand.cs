@@ -6,24 +6,18 @@ namespace Webshop.Orderhandling.Application.Features.Order.Commands.UpdateOrder
 {
     public class UpdateOrderCommand : ICommand
     {
-        public UpdateOrderCommand(int orderId, string customerId, List<UpdateOrderItem> orderItems, decimal discount)
+        public UpdateOrderCommand(int orderId, string customerId, List<Product> products, decimal discount)
         {
             OrderId = orderId;
             CustomerId = customerId;
-            OrderItems = orderItems;
+            Products = products;
             Discount = discount;
         }
 
         public int OrderId { get; private set; }
         public string CustomerId { get; private set; }
-        public List<UpdateOrderItem> OrderItems { get; private set; }
+        public List<Product> Products { get; private set; }
         public decimal Discount { get; private set; }
 
-        public class UpdateOrderItem
-        {
-            public Product Product { get; set; }
-            public int Quantity { get; set; }
-
-        }
     }
 }

@@ -9,6 +9,7 @@ using Webshop.Orderhandling.Application.Features.Order.Commands.UpdateOrder;
 using Webshop.Orderhandling.Domain.AggregateRoots;
 using Webshop.Catalog.Domain.AggregateRoots;
 using Webshop.Domain.Common;
+using Webshop.Orderhandling.Application.Features.Order.Commands.CreateOrder;
 
 namespace Webshop.Orderhandling.Application.Test
 {
@@ -26,16 +27,16 @@ namespace Webshop.Orderhandling.Application.Test
                 Id = 1,
                 CustomerId = "customer1",
                 Discount = 5,
-                OrderItems = new List<OrderItem>
+                Products = new List<Product>
                 {
-                    new OrderItem { Product = product, Quantity = 1 }
+                    new Product ()
                 }
             };
             orderRepositoryMock.Setup(m => m.GetById(It.IsAny<int>())).ReturnsAsync(order);
 
-            var command = new UpdateOrderCommand(1, "customer1", new List<UpdateOrderCommand.UpdateOrderItem>
+            var command = new UpdateOrderCommand(1, "customer1", new List<Product>
             {
-                new UpdateOrderCommand.UpdateOrderItem { Product = product, Quantity = 2 }
+                new Product { Price = 10}
             }, 10);
             var handler = new UpdateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
@@ -53,7 +54,7 @@ namespace Webshop.Orderhandling.Application.Test
             // Arrange
             var loggerMock = new Mock<ILogger<UpdateOrderCommandHandler>>();
             var orderRepositoryMock = new Mock<IOrderRepository>();
-            var command = new UpdateOrderCommand(1, "", new List<UpdateOrderCommand.UpdateOrderItem>(), 10); // Invalid command
+            var command = new UpdateOrderCommand(1, "", new List<Product>(), 10); // Invalid command
             var handler = new UpdateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
             // Act
@@ -75,17 +76,17 @@ namespace Webshop.Orderhandling.Application.Test
                 Id = 1,
                 CustomerId = "customer1",
                 Discount = 5,
-                OrderItems = new List<OrderItem>
+                Products = new List<Product>
                 {
-                    new OrderItem { Product = product, Quantity = 1 }
+                    new Product ()
                 }
             };
             orderRepositoryMock.Setup(m => m.GetById(It.IsAny<int>())).ReturnsAsync(order);
 
-            var command = new UpdateOrderCommand(1, "customer1", new List<UpdateOrderCommand.UpdateOrderItem>
+            var command = new UpdateOrderCommand(1, "customer1", new List<Product>
             {
-                new UpdateOrderCommand.UpdateOrderItem { Product = product, Quantity = 2 }
-            }, 20); // Invalid discount
+                new Product { Price = 10}
+            }, 16); // Invalid discount
             var handler = new UpdateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
             // Act
@@ -108,14 +109,14 @@ namespace Webshop.Orderhandling.Application.Test
                 Id = 1,
                 CustomerId = "customer1",
                 Discount = 5,
-                OrderItems = new List<OrderItem>
+                Products = new List<Product>
                 {
-                    new OrderItem { Product = product, Quantity = 1 }
+                    new Product ()
                 }
             };
             orderRepositoryMock.Setup(m => m.GetById(It.IsAny<int>())).ReturnsAsync(order);
 
-            var command = new UpdateOrderCommand(1, "customer1", new List<UpdateOrderCommand.UpdateOrderItem>(), 10); // No items
+            var command = new UpdateOrderCommand(1, "customer1", new List<Product>(), 10); // No items
             var handler = new UpdateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
             // Act

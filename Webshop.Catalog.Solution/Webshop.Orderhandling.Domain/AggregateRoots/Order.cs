@@ -15,11 +15,11 @@ namespace Webshop.Orderhandling.Domain.AggregateRoots
         public string CustomerId { get; set; }
         public decimal TotalAmount { get; set; }
         public decimal Discount { get; set; }
-        public List<OrderItem> OrderItems { get; set; }
+        public List<Product> Products { get; set; }
 
         public Order()
         {
-            OrderItems = new List<OrderItem>();
+            Products = new List<Product>();
         }
 
         public void ApplyDiscount(decimal discount)
@@ -35,9 +35,9 @@ namespace Webshop.Orderhandling.Domain.AggregateRoots
         private void CalculateTotalAmount()
         {
             decimal total = 0;
-            foreach (var item in OrderItems)
+            foreach (var item in Products)
             {
-                total += item.Product.Price;
+                total += item.Price;
             }
             TotalAmount = total - (total * (Discount / 100));
         }

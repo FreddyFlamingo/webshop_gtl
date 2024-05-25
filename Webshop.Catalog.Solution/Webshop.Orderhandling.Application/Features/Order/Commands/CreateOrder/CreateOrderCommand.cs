@@ -10,22 +10,16 @@ namespace Webshop.Orderhandling.Application.Features.Order.Commands.CreateOrder
 {
     public class CreateOrderCommand : ICommand
     {
-        public CreateOrderCommand(string customerId, List<CreateOrderItem> orderItems, decimal discount)
+        public CreateOrderCommand(string customerId, List<Product> products, decimal discount)
         {
             CustomerId = customerId;
-            OrderItems = orderItems;
+            Products = products;
             Discount = discount;
         }
 
         public string CustomerId { get; private set; }
-        public List<CreateOrderItem> OrderItems { get; private set; }
+        public List<Product> Products { get; private set; }
         public decimal Discount { get; private set; }
 
-        public class CreateOrderItem
-        {
-            public Product Product { get; set; }
-            public int Quantity { get; set; }
-            public decimal TotalPrice => Product.Price * Quantity;
-        }
     }
 }

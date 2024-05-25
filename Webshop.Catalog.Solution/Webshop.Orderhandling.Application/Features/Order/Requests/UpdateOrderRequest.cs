@@ -13,15 +13,9 @@ namespace Webshop.Orderhandling.Application.Features.Order.Requests
     {
         public string CustomerId { get; set; }
         public int OrderId { get; set; }
-        public List<UpdateOrderItem> OrderItems { get; set; }
+        public List<Product> Products { get; set; }
         public decimal Discount { get; set; }
 
-        public class UpdateOrderItem
-        {
-            public Product Product { get; set; }
-            public int Quantity { get; set; }
-            public decimal TotalPrice { get; set; }
-        }
 
         public class Validator : AbstractValidator<UpdateOrderRequest>
         {
@@ -29,17 +23,10 @@ namespace Webshop.Orderhandling.Application.Features.Order.Requests
             {
                 RuleFor(r => r.OrderId).GreaterThan(0).WithMessage(Errors.General.ValueTooSmall(nameof(OrderId), 1).Message);
                 RuleFor(r => r.CustomerId).NotEmpty().WithMessage(Errors.General.ValueIsEmpty(nameof(CustomerId)).Message);
-                RuleForEach(r => r.OrderItems).ChildRules(orderItem =>
+                RuleForEach(r => r.Products).ChildRules(product =>
                 {
-                    orderItem.RuleFor(r => r.Product.Id)
-                        .NotEmpty()
-                        .WithMessage(Errors.General.ValueIsEmpty(nameof(UpdateOrderItem.Product.Id)).Message);
-                    orderItem.RuleFor(r => r.Quantity)
-                        .GreaterThan(0)
-                        .WithMessage(Errors.General.ValueTooSmall(nameof(UpdateOrderItem.Quantity), 1).Message);
-                    orderItem.RuleFor(r => r.TotalPrice)
-                        .GreaterThan(0)
-                        .WithMessage(Errors.General.ValueTooSmall(nameof(UpdateOrderItem.TotalPrice), 1).Message);
+                    product.RuleFor(r => r.Id)
+                        .NotEmpty();
                 });
                 RuleFor(r => r.Discount).InclusiveBetween(0, 15).WithMessage(Errors.General.ValueOutOfRange(nameof(Discount), 0, 15).Message);
             }

@@ -8,6 +8,7 @@ using Webshop.Application.Contracts;
 using Webshop.Orderhandling.Application.Contracts.Persistence;
 using Webshop.Orderhandling.Domain.AggregateRoots;
 using Webshop.Domain.Common;
+using Webshop.Catalog.Domain.AggregateRoots;
 
 namespace Webshop.Orderhandling.Application.Features.Order.Commands.CreateOrder
 {
@@ -26,7 +27,7 @@ namespace Webshop.Orderhandling.Application.Features.Order.Commands.CreateOrder
         {
             try
             {
-                if (command.OrderItems == null || command.OrderItems.Count == 0)
+                if (command.Products == null || command.Products.Count == 0)
                 {
                     return Result.Fail(Errors.General.ValueIsEmpty("Order must contain at least one item."));
                 }
@@ -39,16 +40,14 @@ namespace Webshop.Orderhandling.Application.Features.Order.Commands.CreateOrder
                     Discount = command.Discount,
                 };
 
-                foreach (var item in command.OrderItems)
+                foreach (var item in command.Products)
                 {
-                    var orderItem = new OrderItem
+                    var product = new Product
                     {
-                        Product = item.Product,
-                        Quantity = item.Quantity
                     };
 
-                    order.TotalAmount += item.TotalPrice;
-                    order.OrderItems.Add(orderItem);
+                    order.TotalAmount += item.Price;
+                    order.Products.Add(product);
                 }
 
                 order.ApplyDiscount(command.Discount);

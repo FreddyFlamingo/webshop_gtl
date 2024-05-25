@@ -21,9 +21,9 @@ namespace Webshop.Orderhandling.Application.Test
             var loggerMock = new Mock<ILogger<CreateOrderCommandHandler>>();
             var orderRepositoryMock = new Mock<IOrderRepository>();
             var product = new Product("Test Product", "SKU123", 100, "DKK");
-            var command = new CreateOrderCommand("customer1", new List<CreateOrderCommand.CreateOrderItem>
+            var command = new CreateOrderCommand("customer1", new List<Product>
             {
-                new CreateOrderCommand.CreateOrderItem { Product = product, Quantity = 2 }
+                new Product { Price = 10}
             }, 10);
             var handler = new CreateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
@@ -42,10 +42,10 @@ namespace Webshop.Orderhandling.Application.Test
             var loggerMock = new Mock<ILogger<CreateOrderCommandHandler>>();
             var orderRepositoryMock = new Mock<IOrderRepository>();
             var product = new Product("Test Product", "SKU123", 100, "DKK");
-            var command = new CreateOrderCommand("customer1", new List<CreateOrderCommand.CreateOrderItem>
+            var command = new CreateOrderCommand("customer1", new List<Product>
             {
-                new CreateOrderCommand.CreateOrderItem { Product = product, Quantity = 2}
-            }, 20);
+                new Product { Price = 10}
+            }, 16);
             var handler = new CreateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
             // Act
@@ -62,7 +62,7 @@ namespace Webshop.Orderhandling.Application.Test
             // Arrange
             var loggerMock = new Mock<ILogger<CreateOrderCommandHandler>>();
             var orderRepositoryMock = new Mock<IOrderRepository>();
-            var command = new CreateOrderCommand("customer1", new List<CreateOrderCommand.CreateOrderItem>(), 10);
+            var command = new CreateOrderCommand("customer1", new List<Product>(), 10);
             var handler = new CreateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
             // Act
@@ -80,9 +80,9 @@ namespace Webshop.Orderhandling.Application.Test
             var loggerMock = new Mock<ILogger<CreateOrderCommandHandler>>();
             var orderRepositoryMock = new Mock<IOrderRepository>();
             var product = new Product("Test Product", "SKU123", 100, "DKK");
-            var command = new CreateOrderCommand("customer1", new List<CreateOrderCommand.CreateOrderItem>
+            var command = new CreateOrderCommand("customer1", new List<Product>
             {
-                new CreateOrderCommand.CreateOrderItem { Product = product, Quantity = 2 }
+                new Product { Price = 10}
             }, -5);
             var handler = new CreateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
