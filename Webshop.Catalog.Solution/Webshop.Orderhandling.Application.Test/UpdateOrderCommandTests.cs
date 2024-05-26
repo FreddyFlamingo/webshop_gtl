@@ -16,7 +16,7 @@ namespace Webshop.Orderhandling.Application.Test
     public class UpdateOrderCommandTests
     {
         [Fact]
-        public async Task UpdateOrderCommandHandler_ValidCommand_ExpectSuccess()
+        public async Task UpdateOrderCommandHandler_NewProduct_NewDiscount_ValidCommand_ExpectSuccess()
         {
             // Arrange
             var loggerMock = new Mock<ILogger<UpdateOrderCommandHandler>>();
@@ -27,17 +27,11 @@ namespace Webshop.Orderhandling.Application.Test
                 Id = 1,
                 CustomerId = "customer1",
                 Discount = 5,
-                Products = new List<Product>
-                {
-                    new Product ()
-                }
+                Products = new List<Product> { product }
             };
             orderRepositoryMock.Setup(m => m.GetById(It.IsAny<int>())).ReturnsAsync(order);
 
-            var command = new UpdateOrderCommand(1, "customer1", new List<Product>
-            {
-                new Product { Price = 10}
-            }, 10);
+            var command = new UpdateOrderCommand(1, "customer1", new List<Product> { new Product { Price = 10} }, 10);
             var handler = new UpdateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
             // Act
@@ -49,7 +43,7 @@ namespace Webshop.Orderhandling.Application.Test
         }
 
         [Fact]
-        public async Task UpdateOrderCommandHandler_InvalidCommand_ExpectFailure()
+        public async Task UpdateOrderCommandHandler_NoCustomerId_InvalidCommand_ExpectFailure()
         {
             // Arrange
             var loggerMock = new Mock<ILogger<UpdateOrderCommandHandler>>();
@@ -64,8 +58,10 @@ namespace Webshop.Orderhandling.Application.Test
             Assert.False(result.Success);
         }
 
-        [Fact]
-        public async Task UpdateOrderCommandHandler_DiscountOutOfRange_ExpectFailure()
+        [Theory]
+        [InlineData(-0.1)]
+        [InlineData(15.1)]
+        public async Task UpdateOrderCommandHandler_InvalidDiscount_ExpectFailure(decimal discount)
         {
             // Arrange
             var loggerMock = new Mock<ILogger<UpdateOrderCommandHandler>>();
@@ -75,18 +71,12 @@ namespace Webshop.Orderhandling.Application.Test
             {
                 Id = 1,
                 CustomerId = "customer1",
-                Discount = 5,
-                Products = new List<Product>
-                {
-                    new Product ()
-                }
+                Products = new List<Product> { product }
             };
+            order.ApplyDiscount(5);
             orderRepositoryMock.Setup(m => m.GetById(It.IsAny<int>())).ReturnsAsync(order);
 
-            var command = new UpdateOrderCommand(1, "customer1", new List<Product>
-            {
-                new Product { Price = 10}
-            }, 16); // Invalid discount
+            var command = new UpdateOrderCommand(1, "customer1", new List<Product> { product }, discount);
             var handler = new UpdateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
             // Act
@@ -97,8 +87,36 @@ namespace Webshop.Orderhandling.Application.Test
             Assert.Equal("Discount must be between 0% and 15%", result.Error.Message);
         }
 
+        [Theory]
+        [InlineData(0)]
+        [InlineData(15)]
+        public async Task UpdateOrderCommandHandler_ValidDiscount_ExpectSuccess(decimal discount)
+        {
+            // Arrange
+            var loggerMock = new Mock<ILogger<UpdateOrderCommandHandler>>();
+            var orderRepositoryMock = new Mock<IOrderRepository>();
+            var product = new Product("Test Product", "SKU123", 100, "DKK");
+            var order = new Order
+            {
+                Id = 1,
+                CustomerId = "customer1",
+                Products = new List<Product> { product }
+            };
+            order.ApplyDiscount(5);
+            orderRepositoryMock.Setup(m => m.GetById(It.IsAny<int>())).ReturnsAsync(order);
+
+            var command = new UpdateOrderCommand(1, "customer1", new List<Product> { product }, discount);
+            var handler = new UpdateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
+
+            // Act
+            var result = await handler.Handle(command);
+
+            // Assert
+            Assert.True(result.Success);
+        }
+
         [Fact]
-        public async Task UpdateOrderCommandHandler_EmptyOrderItems_ExpectFailure()
+        public async Task UpdateOrderCommandHandler_NoProduct_InvalidCommand_ExpectFailure()
         {
             // Arrange
             var loggerMock = new Mock<ILogger<UpdateOrderCommandHandler>>();
@@ -109,14 +127,11 @@ namespace Webshop.Orderhandling.Application.Test
                 Id = 1,
                 CustomerId = "customer1",
                 Discount = 5,
-                Products = new List<Product>
-                {
-                    new Product ()
-                }
+                Products = new List<Product> { product }
             };
             orderRepositoryMock.Setup(m => m.GetById(It.IsAny<int>())).ReturnsAsync(order);
 
-            var command = new UpdateOrderCommand(1, "customer1", new List<Product>(), 10); // No items
+            var command = new UpdateOrderCommand(1, "customer1", new List<Product>(), 5); // new list with no items
             var handler = new UpdateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
             // Act
