@@ -1,3 +1,7 @@
+This is copied and developed further as a part of a project on UCN.
+Link to original repository:
+https://github.com/brhvucn/PSU_WebshopProductCatalog
+
 # Webshop Solution
 [![Build](https://github.com/brhvucn/PSU_WebshopProductCatalog/actions/workflows/dotnet.yml/badge.svg)](https://github.com/brhvucn/PSU_WebshopProductCatalog/actions/workflows/dotnet.yml)
 
