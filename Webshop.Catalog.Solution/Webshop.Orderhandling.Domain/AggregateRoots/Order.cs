@@ -22,14 +22,16 @@ namespace Webshop.Orderhandling.Domain.AggregateRoots
             Products = new List<Product>();
         }
 
-        public void ApplyDiscount(decimal discount)
+        public Result ApplyDiscount(decimal discount)
         {
             if (discount < 0 || discount > 15)
             {
-                throw new ArgumentException("Discount must be between 0% and 15%");
+                //throw new ArgumentException("Discount must be between 0% and 15%");
+                return Result.Fail(Errors.General.ValueOutOfRange("Discount", 0, 15));
             }
             Discount = discount;
             CalculateTotalAmount();
+            return Result.Ok();
         }
 
         private void CalculateTotalAmount()

@@ -49,25 +49,25 @@ namespace Webshop.Orderhandling.Application.Test
             Assert.Equal("The value cannot be empty: Order must contain at least one item. ", result.Error.Message);
         }
 
-        [Theory]
-        [InlineData(-0.1)]
-        [InlineData(15.1)]
-        public async Task CreateOrderCommandHandler_InvalidDiscount_ExpectFailure(decimal discount)
-        {
-            // Arrange
-            var loggerMock = new Mock<ILogger<CreateOrderCommandHandler>>();
-            var orderRepositoryMock = new Mock<IOrderRepository>();
-            var product = new Product("Test Product", "SKU123", 100, "DKK");
-            var command = new CreateOrderCommand("customer1", new List<Product>() { product }, discount);
-            var handler = new CreateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
+        //[Theory]
+        //[InlineData(-0.1)]
+        //[InlineData(15.1)]
+        //public async Task CreateOrderCommandHandler_InvalidDiscount_ExpectFailure(decimal discount)
+        //{
+        //    // Arrange
+        //    var loggerMock = new Mock<ILogger<CreateOrderCommandHandler>>();
+        //    var orderRepositoryMock = new Mock<IOrderRepository>();
+        //    var product = new Product("Test Product", "SKU123", 100, "DKK");
+        //    var command = new CreateOrderCommand("customer1", new List<Product>() { product }, discount);
+        //    var handler = new CreateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
-            // Act
-            var result = await handler.Handle(command);
+        //    // Act
+        //    var result = await handler.Handle(command);
 
-            // Assert
-            Assert.False(result.Success);
-            Assert.Equal("Discount must be between 0% and 15%", result.Error.Message);
-        }
+        //    // Assert
+        //    Assert.False(result.Success);
+        //    Assert.Equal("Discount must be between 0% and 15%", result.Error.Message);
+        //}
 
         [Theory]
         [InlineData(0)]

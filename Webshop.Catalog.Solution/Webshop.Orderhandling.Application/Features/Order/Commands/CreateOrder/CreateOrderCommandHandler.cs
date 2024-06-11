@@ -36,7 +36,7 @@ namespace Webshop.Orderhandling.Application.Features.Order.Commands.CreateOrder
                 {
                     OrderDate = DateTime.UtcNow,
                     CustomerId = command.CustomerId,
-                    TotalAmount = 0,
+                    TotalAmount = command.Products.Sum(p => p.Price),
                     Discount = command.Discount,
                 };
 
@@ -44,10 +44,17 @@ namespace Webshop.Orderhandling.Application.Features.Order.Commands.CreateOrder
                 {
                     var product = new Product
                     {
+                        Id = item.Id,
+                        Price = item.Price,
+                        Description = item.Description,
+                        SKU = item.SKU,
+                        AmountInStock = item.AmountInStock,
+                        Currency = item.Currency,
+                        MinStock = item.MinStock
                     };
 
-                    order.TotalAmount += item.Price;
                     order.Products.Add(product);
+                    order.TotalAmount += item.Price;
                 }
 
                 order.ApplyDiscount(command.Discount);

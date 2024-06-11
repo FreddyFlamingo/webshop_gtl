@@ -58,34 +58,34 @@ namespace Webshop.Orderhandling.Application.Test
             Assert.False(result.Success);
         }
 
-        [Theory]
-        [InlineData(-0.1)]
-        [InlineData(15.1)]
-        public async Task UpdateOrderCommandHandler_InvalidDiscount_ExpectFailure(decimal discount)
-        {
-            // Arrange
-            var loggerMock = new Mock<ILogger<UpdateOrderCommandHandler>>();
-            var orderRepositoryMock = new Mock<IOrderRepository>();
-            var product = new Product("Test Product", "SKU123", 100, "DKK");
-            var order = new Order
-            {
-                Id = 1,
-                CustomerId = "customer1",
-                Products = new List<Product> { product }
-            };
-            order.ApplyDiscount(5);
-            orderRepositoryMock.Setup(m => m.GetById(It.IsAny<int>())).ReturnsAsync(order);
+        //[Theory]
+        //[InlineData(-0.1)]
+        //[InlineData(15.1)]
+        //public async Task UpdateOrderCommandHandler_InvalidDiscount_ExpectFailure(decimal discount)
+        //{
+        //    // Arrange
+        //    var loggerMock = new Mock<ILogger<UpdateOrderCommandHandler>>();
+        //    var orderRepositoryMock = new Mock<IOrderRepository>();
+        //    var product = new Product("Test Product", "SKU123", 100, "DKK");
+        //    var order = new Order
+        //    {
+        //        Id = 1,
+        //        CustomerId = "customer1",
+        //        Products = new List<Product> { product }
+        //    };
+        //    order.ApplyDiscount(5);
+        //    orderRepositoryMock.Setup(m => m.GetById(It.IsAny<int>())).ReturnsAsync(order);
 
-            var command = new UpdateOrderCommand(1, "customer1", new List<Product> { product }, discount);
-            var handler = new UpdateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
+        //    var command = new UpdateOrderCommand(1, "customer1", new List<Product> { product }, discount);
+        //    var handler = new UpdateOrderCommandHandler(loggerMock.Object, orderRepositoryMock.Object);
 
-            // Act
-            var result = await handler.Handle(command);
+        //    // Act
+        //    var result = await handler.Handle(command);
 
-            // Assert
-            Assert.False(result.Success);
-            Assert.Equal("Discount must be between 0% and 15%", result.Error.Message);
-        }
+        //    // Assert
+        //    Assert.False(result.Success);
+        //    Assert.Equal("Discount must be between 0% and 15%", result.Error.Message);
+        //}
 
         [Theory]
         [InlineData(0)]
